@@ -1,0 +1,134 @@
+﻿@model IEnumerable<PatientCart.Models.VisitHistories>
+
+@{
+    ViewBag.Title = "История посещений";
+}
+
+<h2>История посещений</h2>
+<link href="~/Content/Site.css" rel="stylesheet" />
+
+<div id="modal_form">
+    <i id="modal_close" class="fas fa-times-circle icon2S"></i>
+    <div class="modalContent">
+
+    </div>
+</div>
+<div id="overlay"></div><!-- Пoдлoжкa -->
+<form action="/VisitHistories/Index">
+    <table class="table table-condensed" style="margin-bottom: 0px;">
+        <tr>
+            <td>
+                <button class="btn btn-primary" id="go">Добавить</button>
+            </td>
+            <td align="right" width="200">
+                <div class="form-group">
+
+                    <input type="text" name="patientName" placeholder="ИИН, ФИО" class="form-control" />
+                </div>
+            </td>
+            <td width="100" align="left">
+                <div class="form-group">
+
+                    <input type="submit" value="Поиск" class="btn btn-info" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
+<table class="table">
+    <tr>
+        <th>
+            Жалобы
+        </th>
+        <th>
+            Дата посещения
+        </th>
+        <th>
+            Диагноз
+        </th>
+        <th>
+            ФИО врача
+        </th>
+        <th>
+            Специалист
+        </th>
+        <th>
+            ФИО пациента
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Complaints)
+            </td>
+            <td>
+                @item.VisitDate.ToShortDateString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diagnoses.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doctors.LastName) @Html.DisplayFor(modelItem => item.Doctors.FirstName) @Html.DisplayFor(modelItem => item.Doctors.PatronymicName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doctors.Specializations.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patients.LastName) @Html.DisplayFor(modelItem => item.Patients.FirstName)  @Html.DisplayFor(modelItem => item.Patients.PatronymicName)
+            </td>
+            <td>
+                <button class="btn btn-primary" onclick="Edit(@item.Id)">Изменить</button> |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#go').click(function (event) {
+                event.preventDefault();
+                $('#overlay').fadeIn(400,
+                    function () {
+                        $('.modalContent').load('@Url.Content("/VisitHistories/Create")');
+                        $('#modal_form')
+                            .css('display', 'block')
+                            .animate({ opacity: 1, top: '33%' }, 200);
+                    });
+            });
+
+            $('#modal_close, #overlay').click(function () {
+                $('#modal_form')
+                    .animate({ opacity: 0, top: '45%' }, 200,
+                        function () {
+                            $(this).css('display', 'none');
+                            $('#overlay').fadeOut(400);
+                        }
+                    );
+                $('#modal_form2M')
+                    .animate({ opacity: 0, top: '45%' }, 200,
+                        function () {
+                            $(this).css('display', 'none');
+                            $('#overlay').fadeOut(400);
+                        }
+                    );
+            });
+        });
+
+    function Edit(id) {
+        $('#overlay').fadeIn(400,
+            function () {
+                $('.modalContent').load('@Url.Content("/VisitHistories/Edit/")' + id);
+                        $('#modal_form')
+                            .css('display', 'block')
+                            .animate({ opacity: 1, top: '33%' }, 200);
+                    });
+    }
+
+    </script>
+}

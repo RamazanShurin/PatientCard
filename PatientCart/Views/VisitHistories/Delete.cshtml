@@ -1,0 +1,63 @@
+﻿@model PatientCart.Models.VisitHistories
+
+@{
+    ViewBag.Title = "Удаление";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы действительно хотите удалить?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Жалоба
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Complaints)
+        </dd>
+
+        <dt>
+           Дата посещения
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VisitDate)
+        </dd>
+
+        <dt>
+           Диагноз
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Diagnoses.Title)
+        </dd>
+
+        <dt>
+            Лечащий врач
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Doctors.LastName) @Html.DisplayFor(model => model.Doctors.FirstName) @Html.DisplayFor(model => model.Doctors.PatronymicName)
+        </dd>
+
+        <dt>
+           Пациент
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patients.LastName) @Html.DisplayFor(model => model.Patients.FirstName) @Html.DisplayFor(model => model.Patients.PatronymicName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Назад к списку", "Index")
+        </div>
+    }
+</div>

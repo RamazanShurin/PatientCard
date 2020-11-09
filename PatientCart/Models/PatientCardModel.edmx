@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище PatientCardModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Diagnoses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="550" />
+        </EntityType>
+        <EntityType Name="Doctors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="150" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="150" />
+          <Property Name="PatronymicName" Type="nvarchar" MaxLength="150" />
+          <Property Name="SpecializationId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="150" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="150" />
+          <Property Name="PatronymicName" Type="nvarchar" MaxLength="150" />
+          <Property Name="IIN" Type="int" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="150" />
+          <Property Name="Phone" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Specializations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="VisitHistories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Complaints" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="VisitDate" Type="datetime" Nullable="false" />
+          <Property Name="DoctorId" Type="int" Nullable="false" />
+          <Property Name="PatientId" Type="int" Nullable="false" />
+          <Property Name="DiagnosisId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Doctors_Specializations">
+          <End Role="Specializations" Type="Self.Specializations" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specializations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Doctors">
+              <PropertyRef Name="SpecializationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VisitHistories_Diagnoses">
+          <End Role="Diagnoses" Type="Self.Diagnoses" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VisitHistories" Type="Self.VisitHistories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Diagnoses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VisitHistories">
+              <PropertyRef Name="DiagnosisId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VisitHistories_Doctors">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VisitHistories" Type="Self.VisitHistories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VisitHistories">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VisitHistories_Patients">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VisitHistories" Type="Self.VisitHistories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VisitHistories">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище PatientCardModelContainer">
+          <EntitySet Name="Diagnoses" EntityType="Self.Diagnoses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Specializations" EntityType="Self.Specializations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VisitHistories" EntityType="Self.VisitHistories" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Doctors_Specializations" Association="Self.FK_Doctors_Specializations">
+            <End Role="Specializations" EntitySet="Specializations" />
+            <End Role="Doctors" EntitySet="Doctors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VisitHistories_Diagnoses" Association="Self.FK_VisitHistories_Diagnoses">
+            <End Role="Diagnoses" EntitySet="Diagnoses" />
+            <End Role="VisitHistories" EntitySet="VisitHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VisitHistories_Doctors" Association="Self.FK_VisitHistories_Doctors">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="VisitHistories" EntitySet="VisitHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VisitHistories_Patients" Association="Self.FK_VisitHistories_Patients">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="VisitHistories" EntitySet="VisitHistories" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PatientCardModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Diagnoses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="VisitHistories" Relationship="Self.FK_VisitHistories_Diagnoses" FromRole="Diagnoses" ToRole="VisitHistories" />
+        </EntityType>
+        <EntityType Name="Doctors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PatronymicName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SpecializationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Specializations" Relationship="Self.FK_Doctors_Specializations" FromRole="Doctors" ToRole="Specializations" />
+          <NavigationProperty Name="VisitHistories" Relationship="Self.FK_VisitHistories_Doctors" FromRole="Doctors" ToRole="VisitHistories" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PatronymicName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IIN" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="VisitHistories" Relationship="Self.FK_VisitHistories_Patients" FromRole="Patients" ToRole="VisitHistories" />
+        </EntityType>
+        <EntityType Name="Specializations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Doctors" Relationship="Self.FK_Doctors_Specializations" FromRole="Specializations" ToRole="Doctors" />
+        </EntityType>
+        <EntityType Name="VisitHistories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Complaints" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="VisitDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DoctorId" Type="Int32" Nullable="false" />
+          <Property Name="PatientId" Type="Int32" Nullable="false" />
+          <Property Name="DiagnosisId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Diagnoses" Relationship="Self.FK_VisitHistories_Diagnoses" FromRole="VisitHistories" ToRole="Diagnoses" />
+          <NavigationProperty Name="Doctors" Relationship="Self.FK_VisitHistories_Doctors" FromRole="VisitHistories" ToRole="Doctors" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK_VisitHistories_Patients" FromRole="VisitHistories" ToRole="Patients" />
+        </EntityType>
+        <Association Name="FK_VisitHistories_Diagnoses">
+          <End Role="Diagnoses" Type="Self.Diagnoses" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VisitHistories" Type="Self.VisitHistories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Diagnoses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VisitHistories">
+              <PropertyRef Name="DiagnosisId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Doctors_Specializations">
+          <End Role="Specializations" Type="Self.Specializations" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specializations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Doctors">
+              <PropertyRef Name="SpecializationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VisitHistories_Doctors">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VisitHistories" Type="Self.VisitHistories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VisitHistories">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VisitHistories_Patients">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="VisitHistories" Type="Self.VisitHistories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VisitHistories">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PatientCardEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Diagnoses" EntityType="Self.Diagnoses" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctors" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" />
+          <EntitySet Name="Specializations" EntityType="Self.Specializations" />
+          <EntitySet Name="VisitHistories" EntityType="Self.VisitHistories" />
+          <AssociationSet Name="FK_VisitHistories_Diagnoses" Association="Self.FK_VisitHistories_Diagnoses">
+            <End Role="Diagnoses" EntitySet="Diagnoses" />
+            <End Role="VisitHistories" EntitySet="VisitHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Doctors_Specializations" Association="Self.FK_Doctors_Specializations">
+            <End Role="Specializations" EntitySet="Specializations" />
+            <End Role="Doctors" EntitySet="Doctors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VisitHistories_Doctors" Association="Self.FK_VisitHistories_Doctors">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="VisitHistories" EntitySet="VisitHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VisitHistories_Patients" Association="Self.FK_VisitHistories_Patients">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="VisitHistories" EntitySet="VisitHistories" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище PatientCardModelContainer" CdmEntityContainer="PatientCardEntities">
+          <EntitySetMapping Name="Diagnoses">
+            <EntityTypeMapping TypeName="PatientCardModel.Diagnoses">
+              <MappingFragment StoreEntitySet="Diagnoses">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="PatientCardModel.Doctors">
+              <MappingFragment StoreEntitySet="Doctors">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PatronymicName" ColumnName="PatronymicName" />
+                <ScalarProperty Name="SpecializationId" ColumnName="SpecializationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="PatientCardModel.Patients">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PatronymicName" ColumnName="PatronymicName" />
+                <ScalarProperty Name="IIN" ColumnName="IIN" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Specializations">
+            <EntityTypeMapping TypeName="PatientCardModel.Specializations">
+              <MappingFragment StoreEntitySet="Specializations">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VisitHistories">
+            <EntityTypeMapping TypeName="PatientCardModel.VisitHistories">
+              <MappingFragment StoreEntitySet="VisitHistories">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Complaints" ColumnName="Complaints" />
+                <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
+                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="DiagnosisId" ColumnName="DiagnosisId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
